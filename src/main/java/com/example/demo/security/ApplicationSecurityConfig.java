@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -26,7 +27,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-
+                 .csrf()
+               .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and()
                 .authorizeRequests()
                 .antMatchers("/", "index", "css/*", "/js/*")
                 .permitAll()
@@ -35,8 +38,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE,"management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
                 .antMatchers(HttpMethod.POST,"/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
                 .antMatchers(HttpMethod.PUT,"/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
-                .antMatchers(HttpMethod.GET,"/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
-                .antMatchers("/management/api/**").hasAnyRole(ApplicationUserRole.ADMIN.name(),ApplicationUserRole.ADMINISTRATEE.name())
+                .antMatchers(HttpMethod.GET,"/management/api/**").hasAnyRole(ApplicationUserRole.ADMIN.name(),ApplicationUserRole.ADMINISTRATEE.name())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -63,7 +65,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails TomUser = User.builder()
                 .username("tom")
                 .password(passwordEncoder.encode("tom"))
-               .roles(ApplicationUserRole.ADMINISTRATEE.name())
+               //.roles(ApplicationUserRole.ADMINISTRATEE.name())
                 .authorities(ApplicationUserRole.ADMINISTRATEE.getGrantedAuthorities())
                 .build();
 
