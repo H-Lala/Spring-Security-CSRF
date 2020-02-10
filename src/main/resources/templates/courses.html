@@ -8,9 +8,9 @@
 		http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.3.xsd"/>
 <http use-expressions="true">
-    <intercept-url pattern="/**" access="permitAll"/>
+    <intercept-url pattern="/courses" access="permitAll"/>
     <intercept-url pattern="/login" access="isAuthenticated()"/>
-    <form-login authentication-success-handler-ref="refererHandler" />
+    <form-logout authentication-success-handler-ref="refererHandler" />
 </http>
 <beans:bean
         class="RefererRedirectionAuthenticationSuccessHandler"
@@ -22,15 +22,18 @@
 <div th:fragment="content">
     <form name="f" th:action="@{/logout}" method="post">
         <fieldset>
-
-
             <div class="form-actions">
                 <p>You are logged!</p>
                 <button type="submit" class="btn">Logout</button>
-            </div>
-            <div th:action="${form}">
                 <input
                         th:type="hidden"
+                        th:name="${_csrf.parameterName}"
+                        th:value="${_csrf.token}"/>
+            </div>
+            <div>
+                <input
+                        th:type="hidden"
+                        th:name="${_csrf.parameterName}"
                 th:value="${_csrf.token}"/>
             </div>
             <br>

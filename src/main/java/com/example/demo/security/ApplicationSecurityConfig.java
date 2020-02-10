@@ -23,7 +23,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.*;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -87,15 +87,21 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
-                .clearAuthentication(true)
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID", "remember-me")
                 .logoutSuccessUrl("/login")
+                .and()
+                .addFilterAfter(new CsrfHeaderFilter(),CsrfFilter.class)
+                .csrf()
+                .csrfTokenRepository(new CookieCsrfTokenRepository())
+                .and()
+
+                //.clearAuthentication(true)
+                //.invalidateHttpSession(false)
+                //.deleteCookies("JSESSIONID", "remember-me")
+                //.addLogoutHandler(new CsrfLogoutHandler(new HttpSessionCsrfTokenRepository()))
 
 
                 //     .logoutRequestMatcher(new AntPathRequestMatcher("/login","POST"))
-                .and()
+                //.and()
                 .httpBasic();
 
     }
