@@ -7,6 +7,14 @@
         http://www.springframework.org/schema/security/spring-security-4.2.xsd
 		http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.3.xsd"/>
+<http use-expressions="true">
+    <intercept-url pattern="/**" access="permitAll"/>
+    <intercept-url pattern="/login" access="isAuthenticated()"/>
+    <form-login authentication-success-handler-ref="refererHandler" />
+</http>
+<beans:bean
+        class="RefererRedirectionAuthenticationSuccessHandler"
+        name="refererHandler"/>
 <head>
     <title>Please Login</title>
 </head>

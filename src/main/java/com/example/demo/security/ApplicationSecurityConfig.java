@@ -68,6 +68,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/login", "POST"))
                 .requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/logout", "POST"))
+                .requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/courses","POST"))
                 .csrfTokenRepository(new CookieCsrfTokenRepository())
                 .and()
                 .formLogin()
