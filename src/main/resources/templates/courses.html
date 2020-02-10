@@ -10,11 +10,11 @@
 <http use-expressions="true">
     <intercept-url pattern="/courses" access="permitAll"/>
     <intercept-url pattern="/login" access="isAuthenticated()"/>
-    <form-logout authentication-success-handler-ref="refererHandler" />
+    <form-logout authentication-success-handler-ref="filter" />
 </http>
 <beans:bean
-        class="RefererRedirectionAuthenticationSuccessHandler"
-        name="refererHandler"/>
+        class="CsrfHeaderFilter"
+        name="filter"/>
 <head>
     <title>Please Login</title>
 </head>
@@ -25,16 +25,6 @@
             <div class="form-actions">
                 <p>You are logged!</p>
                 <button type="submit" class="btn">Logout</button>
-                <input
-                        th:type="hidden"
-                        th:name="${_csrf.parameterName}"
-                        th:value="${_csrf.token}"/>
-            </div>
-            <div>
-                <input
-                        th:type="hidden"
-                        th:name="${_csrf.parameterName}"
-                th:value="${_csrf.token}"/>
             </div>
             <br>
         </fieldset>
