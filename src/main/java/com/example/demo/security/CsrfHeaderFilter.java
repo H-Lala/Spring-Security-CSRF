@@ -30,6 +30,9 @@ public class CsrfHeaderFilter extends OncePerRequestFilter {
                 httpServletResponse.addCookie(cookie);
             }
         }
+        else {
+            new CsrfException("csrf exception");
+        }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 

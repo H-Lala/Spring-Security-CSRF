@@ -21,7 +21,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.security.web.csrf.*;
 import org.springframework.security.web.util.matcher.AndRequestMatcher;
@@ -70,11 +72,13 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new CsrfHeaderFilter(), CsrfFilter.class)
                 .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
                 .csrf()
-                .requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/login", "POST"))
-                .requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/logout", "POST"))
-                .requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/courses", "POST"))
+               // .requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/login", "POST"))
+                //.requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/logout", "POST"))
+                //.requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/courses", "POST"))
                 .csrfTokenRepository(new CookieCsrfTokenRepository())
                 .and()
+                .addFilterBefore(new CsrfHeaderFilter(),CsrfFilter.class)
+               // .and()
                 .formLogin()
                 .successHandler(new RefererRedirectionAuthenticationSuccessHandler())
                 .loginPage("/login")
@@ -88,10 +92,13 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
                 .and()
+                .exceptionHandling()
+                .and()
                 .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
                 .addFilterBefore(new CsrfHeaderFilter(), CsrfFilter.class)
                 .csrf()
                 .csrfTokenRepository(new CookieCsrfTokenRepository())
+
                 .and()
 
                 //.clearAuthentication(true)
@@ -149,4 +156,5 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(applicationUserService);
         return provider;
     }
+
 }
