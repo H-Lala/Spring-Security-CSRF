@@ -36,8 +36,6 @@ import java.util.concurrent.TimeUnit;
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     private final ApplicationUserService applicationUserService;
-
-
     @Autowired
     public ApplicationSecurityConfig(PasswordEncoder passwordEncoder, ApplicationUserService applicationUserService) {
         this.passwordEncoder = passwordEncoder;
@@ -69,12 +67,12 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.sessionManagement()
                 //.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 //.and()
-                .addFilterBefore(new CsrfHeaderFilter(),CsrfFilter.class)
-                .addFilterAfter(new CsrfHeaderFilter(),CsrfFilter.class)
+                .addFilterBefore(new CsrfHeaderFilter(), CsrfFilter.class)
+                .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
                 .csrf()
                 .requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/login", "POST"))
                 .requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/logout", "POST"))
-                .requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/courses","POST"))
+                .requireCsrfProtectionMatcher(new AntPathRequestMatcher("**/courses", "POST"))
                 .csrfTokenRepository(new CookieCsrfTokenRepository())
                 .and()
                 .formLogin()
@@ -90,8 +88,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
                 .and()
-                .addFilterAfter(new CsrfHeaderFilter(),CsrfFilter.class)
-                .addFilterBefore(new CsrfHeaderFilter(),CsrfFilter.class)
+                .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
+                .addFilterBefore(new CsrfHeaderFilter(), CsrfFilter.class)
                 .csrf()
                 .csrfTokenRepository(new CookieCsrfTokenRepository())
                 .and()
@@ -100,8 +98,6 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.invalidateHttpSession(false)
                 //.deleteCookies("JSESSIONID", "remember-me")
                 //.addLogoutHandler(new CsrfLogoutHandler(new HttpSessionCsrfTokenRepository()))
-
-
                 //     .logoutRequestMatcher(new AntPathRequestMatcher("/login","POST"))
                 //.and()
                 .httpBasic();
